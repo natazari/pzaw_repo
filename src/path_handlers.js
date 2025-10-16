@@ -25,7 +25,7 @@ const pathConfigs = [
     allowed_methods: ["GET"],
     handler: (req, res) => {
       res.writeHead(200, { "Content-Type": "image/vnd.microsoft.icon" });
-      res.end("hello world!\n");
+      res.end(favicon);
     },
 
   }
