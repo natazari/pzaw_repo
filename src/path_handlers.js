@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
+import { readFile, readFileSync } from "node:fs";
 
 const index_html = readFileSync("static/index.html");
-
+const favicon = readFileSync("favicon.ico");
 const pathConfigs = [
   {
     path: "/",

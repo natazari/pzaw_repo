@@ -1,7 +1,7 @@
 {
   "name": "first-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Programowanie zaawansowanych aplikacji webowych",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -12,5 +12,16 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^24.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natazari/pzaw_repo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/natazari/pzaw_repo/issues"
+  },
+  "homepage": "https://github.com/natazari/pzaw_repo#readme",
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
