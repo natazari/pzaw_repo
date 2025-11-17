@@ -16,3 +16,22 @@ main {
     padding: 1rem;
     border-radius: 0.5rem;
 }
+.fronty{
+    padding: 1%;
+}
+.fronty label{
+    padding-right: 2vw;
+}
+button{
+    padding:1%;
+    background-color: rgb(17, 78, 32);
+    color: white;
+    border-radius: 10%;
+    border: dashed rgb(65, 65, 65) 5px;
+ 
+}
+button:hover{
+    transition-duration: 0.3s;
+    background-color: rgb(182, 236, 195);
+    color: rgb(0, 0, 0);
+}
