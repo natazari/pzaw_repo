@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import collections from "./models/collection.js";
 const port = 8000;
 
@@ -9,6 +10,13 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
 
+app.use(morgan("dev"));
+
+function log_request(req, res, next) {
+  console.log(`Request ${req.method} ${req.path}`);
+  next();
+};
+app.use(log_request);
 app.get("/collections/metal", (req, res) => {
   res.render("collections", {
     title: "metal",
@@ -71,5 +79,3 @@ app.post("/collections/:collection_id/new", (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
-//dfdf
-//CHANGES WHOOO
