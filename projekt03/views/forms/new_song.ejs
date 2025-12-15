@@ -1,0 +1,35 @@
+<form action="/collections/<%=collection.id%>/new" method="POST">
+  <div class="songs">
+    
+    <input
+      type="text"
+      name="song_name"
+      id="song_name"
+      required
+      minlength="1"
+      maxlength="500"
+      placeholder="Tytuł piosenki"
+      <% if (locals.front){ %>
+      value="<%= front %>"
+      <% }%>
+    />
+  </div>
+  <div class="songs">
+
+    <input
+      type="text"
+      name="album"
+      id="album"
+      required
+      minlength="1"
+      maxlength="500"
+      placeholder="Album"
+      <% if (locals.back){ %>
+      value="<%= back %>"
+      <% }%>
+    />
+  </div>
+  <div>
+    <button>Dodaj</button>
+  </div>
+</form>
