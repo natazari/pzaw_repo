@@ -1,0 +1,31 @@
+<%- include("head.partial.ejs") %>
+
+  <h1><%= title %></h1>
+  <div>
+    <% if (locals.errors != null) {%>
+    <ul id="errors">
+      <% errors.forEach(function(error){ %>
+      <li><%= error %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <%- include("forms/edit_artist.ejs") %>
+    <% if (locals.artist.songs && locals.artist.songs.length > 0) { %>
+      <ul id="collections">
+        <% artist.songs.forEach(function(song){ %>
+        <li>
+          <%- include("forms/edit_song.ejs", {song, artist}) %>
+          <form class="song-action" action="/songs/delete/<%= artist.id %>/<%= artist.id %>" method="POST">
+            <button>Usuń</button>
+          </form>
+        </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>Ten artysta nie ma adnych piosenek. Dodaj nowe poniżej.</p>
+    <% } %>
+  </div>
+  <a href="/songs/view/<%= artist.id %>">Powrót</a>
+</main>
+
+<%- include("foot.partial.ejs") %>

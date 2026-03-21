@@ -1,0 +1,32 @@
+<form action="/collections/artist/new" method="POST">
+  <div>
+    <label for="artist_name">Nazwa artysty</label>
+    <input
+      type="text"
+      name="artist"
+      id="artist_name"
+      required
+      minlength="3"
+      maxlength="100"
+      <% if (locals.name){ %>
+      value="<%= name %>"
+      <% }%>
+    />
+
+    <label for="artist_genre">Gatunek</label>
+    <input
+      type="text"
+      name="genre"
+      id="artist_name"
+      required
+      minlength="2"
+      maxlength="100"
+      <% if (locals.name){ %>
+      value="<%= name %>"
+      <% }%>
+    />
+  </div>
+  <div>
+    <button>Dodaj</button>
+  </div>
+</form>

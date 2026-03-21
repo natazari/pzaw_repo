@@ -1,0 +1,20 @@
+<%- include("head.partial.ejs") %>
+<main>
+  <nav>
+    <a href="/">Powrót do listy kolekcji</a>
+  </nav>
+  <h1><%= title %></h1>
+  <div>
+    <h3>Nowy artysta</h3>
+    <% if (locals.errors != null) {%>
+    <ul id="errors">
+      <% errors.forEach(function(error){ %>
+      <li><%= error %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <%- include("forms/new_artist.ejs") %>
+  </div>
+</main>
+
+<%- include("foot.partial.ejs") %>

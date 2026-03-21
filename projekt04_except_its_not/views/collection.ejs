@@ -1,0 +1,17 @@
+<%- include("head.partial.ejs") %>
+
+
+  <h1><%= title %></h1>
+  <a href="/songs/edit/<%= artist.id %>" class="action-link">Edytuj katergorię</a>
+
+  <ul id="collections">
+    <% collection.songs.forEach(function(song){ %>
+    
+    <li><%= song.song_name %> - <%= song.album %></li>
+    <% }) %>
+  </ul>
+<%- include("forms/new_song.ejs") %>
+
+</main>
+
+<%- include("foot.partial.ejs") %>

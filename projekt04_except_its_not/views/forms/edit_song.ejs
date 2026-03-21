@@ -1,0 +1,6 @@
+<form class="songs-action" action="/songs/edit/<%= artist.id %>/<%= song.id %>" method="POST">
+    <input type="text" name="song_name" id="song-<%= song.id %>-song_name" value="<%= song.front %>" required minlength="1" maxlength="500"> 
+    -
+    <input type="text" name="album" id="song-<%= song.id %>-album" value="<%= song.back %>" required minlength="1" maxlength="500"> 
+    <button>Zapisz</button>
+</form>

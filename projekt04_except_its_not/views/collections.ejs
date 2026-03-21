@@ -1,0 +1,18 @@
+<%- include("head.partial.ejs") %>
+
+  <h1><%= title %></h1>
+
+  <ul id="collections">
+    <% collections.forEach(function(collection) { %>
+      <% if (collection.genre === title) { %>
+        <li>
+          <a href="/collections/<%= collection.id %>">
+            <%= collection.artist %>
+          </a>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+ <a href="/collections/artist/new">Dodaj nowego artystę</a>
+</main>
+<%- include("foot.partial.ejs") %>

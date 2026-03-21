@@ -49,14 +49,6 @@ const db_ops = {
 
 
 export function getCollectionSummaries() {
-  // return Object.entries(collections).map(([id, collection]) => {
-  //   return { 
-  //     id, 
-  //     name: id, 
-  //     artist: collection.artist, 
-  //     genre: collection.genre  
-  //   };
-  // });
     var collections = db_ops.get_collections.all();
   console.log("getCollectionSummaries RETURNED:", collections);
   
@@ -64,13 +56,7 @@ export function getCollectionSummaries() {
   
 }
 export function getCollection(collectionId){
-//   if (collections.hasOwnProperty(collection_id)) {
-//     return {
-//         ...collections[collection_id],
-//         id: collection_id,
-//         name: collection_id  
-//     };
-// }return null
+
 
   let collection = db_ops.get_collection_by_id.get(collectionId);
   if (collection != null) {
@@ -79,15 +65,13 @@ export function getCollection(collectionId){
   }
   return null;
 };
-
+//hasArtist  ????:
 export function hasCollection(collectionId) {
-  // return collections.hasOwnProperty(collectionId);
   let collection = db_ops.get_collection_by_id.get(collectionId);
   return collection != null;
 };
 
 export function addSong(collectionId, song) {
-  // if (hasCollection(collectionId)) collections[collectionId].songs.push(song);
   return db_ops.insert_song_by_id.get(collectionId, song.song_name, song.album);
 };
 
@@ -113,11 +97,33 @@ export function addCollection(collectionId, artist, genre) {
   return db_ops.insert_collection.get(collectionId, artist, genre);
 };
 
+export function validateArtistName(name) {
+  var errors = [];
+  if (typeof name != "string") {
+    errors.push("Artist's name name should be a string");
+  } else {
+    if (name.length < 3 || name.length > 100) {
+      errors.push("Artist's name should have 3-100 characters");
+    }
+  }
+
+  return errors;
+};
+export function updateArtist(artistId, newArtistId, name) {
+  return db_ops.update_artist_by_id.get({
+    $artist_id: artistId,
+    $new_artist_id: newArtistId,
+    $name: name,
+  });
+};
+
 export default {
   getCollectionSummaries,
   getCollection,
   addSong,
   addCollection,
   hasCollection,
-  validateSongData
+  validateSongData,
+  validateArtistName,
+  updateArtist
 };
