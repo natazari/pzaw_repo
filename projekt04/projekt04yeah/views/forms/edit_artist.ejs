@@ -1,0 +1,17 @@
+<form action="/collections/artists/edit/<%=artist.id%>" method="POST">
+  <div>
+    <label for="artist_name">Nazwa artysty</label>
+    <input
+      type="text"
+      name="name"
+      id="artist_name"
+      required
+      minlength="3"
+      maxlength="100"
+      value="<%= artist.artist_name %>"
+    />
+  </div>
+  <div>
+    <button>Zapisz</button>
+  </div>
+</form>

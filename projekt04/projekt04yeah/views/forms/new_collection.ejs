@@ -1,0 +1,19 @@
+<form action="/collections/new_collection" method="POST">
+  <div>
+    <label for="collection_name">Nazwa kategorii</label>
+    <input
+      type="text"
+      name="name"
+      id="collection_name"
+      required
+      minlength="3"
+      maxlength="100"
+      <% if (locals.name){ %>
+      value="<%= name %>"
+      <% }%>
+    />
+  </div>
+  <div>
+    <button>Dodaj</button>
+  </div>
+</form>

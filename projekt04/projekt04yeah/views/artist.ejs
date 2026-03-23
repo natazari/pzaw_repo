@@ -1,0 +1,22 @@
+<%- include("head.partial.ejs") %>
+<main>
+  <h1><%= title %></h1>
+  <a href="/collections/artists/edit/<%= artist.id %>" class="action-link">Edytuj artystę</a>
+  <% if (artist.songs && artist.songs.length > 0) { %>
+    <ul id="artists">
+      <% artist.songs.forEach(function(song){ %>
+      <li>
+        <%= song.song_name %> - <%= song.album %>
+      </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>Ten artysta jeszcze nie ma żadnych piosenek. Dodaj nowe poniżej.</p>
+  <% } %>
+  <div>
+    <h3>Nowa piosenka</h3>
+    <%- include("forms/new_song.ejs") %>
+  </div>
+</main>
+
+<%- include("foot.partial.ejs") %>

@@ -1,0 +1,33 @@
+<form action="collections/artists/songs/add_song/<%=artist.id%>" method="POST">
+  <div>
+    <label for="song_name">Tytuł piosenki</label>
+    <input
+      type="text"
+      name="song_name"
+      id="song_name"
+      required
+      minlength="1"
+      maxlength="500"
+      <% if (locals.song_name){ %>
+      value="<%= song_name %>"
+      <% }%>
+    />
+  </div>
+  <div>
+    <label for="album">album</label>
+    <input
+      type="text"
+      name="album"
+      id="album"
+      required
+      minlength="1"
+      maxlength="500"
+      <% if (locals.album){ %>
+      value="<%= album %>"
+      <% }%>
+    />
+  </div>
+  <div>
+    <button>Dodaj</button>
+  </div>
+</form>

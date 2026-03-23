@@ -1,11 +1,11 @@
 <%- include("head.partial.ejs") %>
 <main>
   <nav>
-    <a href="/cards">Powrót do listy kategorii</a>
+    <a href="/collections">Powrót do listy kolekcji</a>
   </nav>
   <h1><%= title %></h1>
   <div>
-    <h3>Nowa kategoria</h3>
+    <h3>Nowa kolekcja</h3>
     <% if (locals.errors != null) {%>
     <ul id="errors">
       <% errors.forEach(function(error){ %>
@@ -13,7 +13,7 @@
       <% }) %>
     </ul>
     <% } %>
-    <%- include("forms/new_category.ejs") %>
+    <%- include("forms/new_collection.ejs") %>
   </div>
 </main>
 

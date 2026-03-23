@@ -1,0 +1,22 @@
+<%- include("head.partial.ejs") %>
+<main>
+  <h1><%= title %></h1>
+  <a href="/collections/edit/<%= collection.id %>" class="action-link">Edytuj kolekcję</a>
+  <% if (collection.artists && collection.artists.length > 0) { %>
+    <ul id="collections">
+      <% collection.artists.forEach(function(artist){ %>
+      <li>
+        <%= artist.artist_name %> 
+      </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>W tej kolekcji nie ma jeszcze żadnych artystów. Dodaj kogoś poniżej.</p>
+  <% } %>
+  <div>
+    <h3>Nowy artysta</h3>
+    <%- include("forms/new_artist.ejs") %>
+  </div>
+</main>
+
+<%- include("foot.partial.ejs") %>
