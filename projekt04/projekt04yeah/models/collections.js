@@ -193,38 +193,38 @@ export function validateSongData(song) {
   }
   return errors;
 };
-export function validateCollectionName(name) {
+export function validateCollectionOrArtistName(name) {
   var errors = [];
   if (typeof name != "string") {
-    errors.push("Collection name should be a string");
+    errors.push("Collection or artist's name should be a string");
   } else {
     if (name.length < 1 || name.length > 100) {
-      errors.push("Collection name should have 1-100 characters");
+      errors.push("Collection or artist's name should have 1-100 characters");
     }
   }
 
   return errors;
 };
-export function validateArtistName(name) {
-  var errors = [];
-  if (typeof name != "string") {
-    errors.push("Artist name should be a string");
-  } else {
-    if (name.length < 2 || name.length > 100) {
-      errors.push("Artist name should have 2-100 characters");
-    }
-  }
+// export function validateArtistName(name) {
+//   var errors = [];
+//   if (typeof name != "string") {
+//     errors.push("Artist name should be a string");
+//   } else {
+//     if (name.length < 2 || name.length > 100) {
+//       errors.push("Artist name should have 2-100 characters");
+//     }
+//   }
 
-  return errors;
-}
+//   return errors;
+// }
 
 export function generateCollectionId(name) {
-  const collectionId = name
+  const generatedId = name
     .toLowerCase()
     .replace(/(\s|[.-])+/g, "-")
     .replace(/[^a-z0-9.-]/g, "");
 
-  return collectionId;
+  return generatedId;
 }
 
 export default {
@@ -242,7 +242,7 @@ export default {
   updateSong,
   deleteArtistById,
   deleteSongById,
-  validateCollectionName,
-  validateArtistName,
+  validateCollectionOrArtistName,
+  
   generateCollectionId
 };

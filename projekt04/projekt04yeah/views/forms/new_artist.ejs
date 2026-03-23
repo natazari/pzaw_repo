@@ -1,9 +1,9 @@
-<form action="/artists/new_artist" method="POST">
+<form action="/collections/<%= collection_id %>/artists" method="POST">
   <div>
     <label for="artist_name">Nazwa artysty</label>
     <input
       type="text"
-      name="name"
+      name="artist_name"
       id="artist_name"
       required
       minlength="3"
