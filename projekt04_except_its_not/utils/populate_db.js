@@ -22,7 +22,7 @@ const collections_list = {
     ],
   },
 
-    "Operation Ivy": {
+    "pickituppickitup": {
     artist: "Operation Ivy",
     genre: "punk",
    songs: [

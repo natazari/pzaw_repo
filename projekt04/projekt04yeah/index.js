@@ -18,9 +18,13 @@ app.get("/collections", (req, res) => {
   });
 });
 
+app.get("/collections/new_collection", (req, res) => {
+  res.render("collection_new", {
+    title: "Nowa kolekcja",
+  });
+});
 
-//co z /view /???????
-app.get("/collections/view/:collection_id", (req, res) => {
+app.get("/collections/:collection_id", (req, res) => {
   const collection = collections.getCollection(req.params.collection_id);
   if (collection != null) {
     res.render("collection", {
@@ -46,26 +50,21 @@ app.get("/artists/:artist_id", (req, res)=>{
   }
 });
 
-app.get("/collections/new_collection", (req, res) => {
-  res.render("collection_new", {
-    title: "Nowa kolekcja",
-  });
-});
 
 app.post("/collections/new_collection", (req, res) => {
   const collection_name = req.body.name;
   var collection_id = null;
   var errors = collections.validateCollectionOrArtistName(collection_name);
   if (errors.length == 0) {
-    collection_id = collections.generateCollectionOrArtistId(collection_name);
+    collection_id = collections.generateCollectionId(collection_name);
     if (collections.hasCollection(collection_id)) {
       errors.push("Collection id is already taken");
     }
   }
 
   if (errors.length == 0) {
-    flashcards.addCollection(collection_id, collection_name);
-    res.redirect(`/collections/view/${collection_id}`);
+    collections.addCollection(collection_id, collection_name);
+    res.redirect(`/collections/${collection_id}`);
   } else {
     res.status(400);
     res.render("collection_new", {
@@ -76,9 +75,11 @@ app.post("/collections/new_collection", (req, res) => {
   }
 });
 
-app.get("/collections/:collection_id/artists", (req, res) => {
+app.get("/collections/:collection_id/artists/new", (req, res) => {
+  const collection_id = req.params.collection_id;
   res.render("artist_new", {
     title: "Nowy artysta",
+    collection_id
   });
 });
 
@@ -137,7 +138,6 @@ app.post("/artists/:artist_id/add_song", (req, res) => {
     },
   });
 });
-
 
 
 

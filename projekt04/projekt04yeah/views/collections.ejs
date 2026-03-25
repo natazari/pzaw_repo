@@ -4,7 +4,7 @@
   <h1><%= title %></h1>
   <ul id="collections">
     <% collections.forEach(function(collection){ %>
-    <li><a href="/collections/view/<%= collection.id %>"><%= collection.name %></a></li>
+    <li><a href="/collections/<%= collection.id %>"><%= collection.name %></a></li>
     <% }) %>
   </ul>
   <a href="/collections/new_collection">Dodaj nową kolekcję</a>

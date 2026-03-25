@@ -6,7 +6,9 @@
     <ul id="collections">
       <% collection.artists.forEach(function(artist){ %>
       <li>
-        <%= artist.artist_name %> 
+        <a href="/artists/<%= artist.id %>">
+          <%= artist.artist_name %>
+        </a>
       </li>
       <% }) %>
     </ul>
@@ -15,7 +17,7 @@
   <% } %>
   <div>
     <h3>Nowy artysta</h3>
-    <%- include("forms/new_artist.ejs") %>
+    <%- include("forms/new_artist.ejs", { collection_id: collection.id }) %>
   </div>
 </main>
 

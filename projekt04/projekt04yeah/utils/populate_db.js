@@ -22,7 +22,7 @@ const collections_list = {
     ],
   },
 
-  "Operation Ivy": {
+  "PickItUp!": {
     artists: [
       {
         artist: "Operation Ivy",
@@ -31,6 +31,14 @@ const collections_list = {
           { song_name: "Sound System", album: "Operation Ivy" },
         ],
       },
+        {
+    artist: "Dead Kennedys",
+    songs: [
+      { song_name: "Buzzbomb", album: "Plastic Surgery Disasters" },
+      { song_name: "Lets Lynch the Landlord", album: "Fresh Fruit for Rotting Vegetables" },
+      { song_name: "Holiday in Cambodia", album: "Fresh Fruit for Rotting Vegetables" }
+    ],
+  }
     ],
   }
 };
