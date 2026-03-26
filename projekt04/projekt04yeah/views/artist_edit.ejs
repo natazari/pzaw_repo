@@ -1,7 +1,8 @@
 <%- include("head.partial.ejs") %>
 <main>
   <nav>
-    <a href="/collections/artists">Powrót do listy artystów</a>
+    <a href="/collections/<%= artist.collection_id %>">Powrót do listy</a>
+    <!-- <a href="/collections/artists">Powrót do listy artystów</a> -->
   </nav>
   <h1><%= title %></h1>
   <div>
@@ -13,12 +14,12 @@
     </ul>
     <% } %>
     <%- include("forms/edit_artist.ejs") %>
-    <% if (locals.artists.songs && locals.artist.songs.length > 0) { %>
+   <% if (artist.songs && artist.songs.length > 0) { %>
       <ul id="songs">
-        <% collection.artist.songs.forEach(function(song){ %>
+        <% artist.songs.forEach(function(song){ %>
         <li>
-          <%- include("forms/edit_artist.ejs", {song, artist}) %>
-          <form class="artist-action" action="collections/artists/songs/delete/<%= song.id %>" method="POST">
+          <% artist.songs.forEach(function(song){ %>
+          <form class="artist-action" action="/collections/artists/songs/delete/<%= song.id %>" method="POST">
             <button>Usuń</button>
           </form>
         </li>
@@ -28,7 +29,7 @@
       <p>Artysta nie ma piosenek. Dodaj nowe poniżej.</p>
     <% } %>
   </div>
-  <a href="collections/artists/view/<%= artist.id %>">Powrót</a>
+  <a href="/collections/artists/<%= artist.id %>">Powrót</a>
 </main>
 
 <%- include("foot.partial.ejs") %>

@@ -83,6 +83,11 @@ app.get("/collections/:collection_id/artists/new", (req, res) => {
   });
 });
 
+app.post("/artists/delete/:artist_id", (req, res) => {
+  collections.deleteArtistById(req.params.artist_id);
+  res.redirect("back");
+});
+
 app.post("/collections/:collection_id/artists", (req, res) => {
   const collection_id = req.params.collection_id;
   const artist_name = req.body.artist_name;
@@ -139,7 +144,113 @@ app.post("/artists/:artist_id/add_song", (req, res) => {
   });
 });
 
+app.get("/collections/edit/:collection_id", (req, res) => {
+  const collection_id = req.params.collection_id;
+  const errors = [];
+  var collection = collections.getCollection(collection_id);
+  if (collection != null) {
+    res.render("collection_edit", {
+      errors,
+      title: "Edycja kolekcji",
+      collection,
+    });
+  } else {
+    res.sendStatus(404);
+  }
+});
 
+app.post("/collections/edit/:collection_id", (req, res) => {
+  const collection_id = req.params.collection_id;
+  if (collections.hasCollection(collection_id)) {
+    const collection_name = req.body.name;
+    var new_collection_id = null;
+    const errors = collections.validateCollectionOrArtistName(collection_name);
+    if (errors.length == 0) {
+      new_collection_id = collections.generateCollectionId(collection_name);
+      if (
+        new_collection_id !== collection_id &&
+        collections.hasCollection(new_collection_id)
+      ) {
+        errors.push("collection id is already taken");
+      }
+    }
+    if (errors.length == 0) {
+      const collection = collections.updateCollection(
+        collection_id,
+        new_collection_id,
+        collection_name
+      );
+      if (collection != null) {
+        // category id may have changed due to name change
+        res.redirect("/collections/" + collection.id);
+        res.write("Unexpected error while updating collection :[[");
+        res.sendStatus(500);
+      }
+    } else {
+      const collection = collections.getCollection(collection_id);
+      res.render("collection_edit", {
+        errors,
+        title: "Edycja kolekcji",
+        collection,
+      });
+    }
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.get("/collections/artists/edit/:artist_id", (req, res) => {
+  const artist = collections.getArtist(req.params.artist_id);
+
+  if (!artist) return res.sendStatus(404);
+
+  res.render("artist_edit", {
+    title: "Edycja artysty",
+    artist,
+    errors: [],
+  });
+});
+
+app.post("/collections/artists/edit/:artist_id", (req, res) => {
+  const artist_id = req.params.artist_id;
+
+  if (!collections.hasArtist(artist_id) || !collections.hasSong(song_id)) {
+    return res.sendStatus(404);
+  }
+
+  const song = {
+    id: song_id,
+    song_name: req.body.song_name,
+    album: req.body.album,
+  };
+
+  const errors = collections.validateSongData(song);
+
+  if (errors.length === 0) {
+    collections.updateSong(song);
+    return res.redirect(`/artists/${artist_id}`);
+  }
+
+  const artist = collections.getArtist(artist_id);
+
+  res.status(400).render("artist", {
+    errors,
+    title: artist.artist_name,
+    artist,
+  });
+});
+app.post("/collections/artists/songs/delete/:song_id", (req, res) => {
+  const artist_id = req.params.artist_id;
+  const song_id = req.params.song_id;
+
+  if (!collections.hasArtist(artist_id) || !collections.hasSong(song_id)) {
+    return res.sendStatus(404);
+  }
+
+  collections.deleteSongById(song_id);
+
+  res.redirect(`/artists/${artist_id}`);
+});
 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);

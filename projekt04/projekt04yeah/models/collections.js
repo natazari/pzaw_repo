@@ -169,13 +169,13 @@ export function addCollection(collectionId, name) {
 }
 
 
-// export function updateCollection(collectionId, newCollectionId, name) {
-//   return db_ops.update_collection_by_id.get({
-//     $collection_id: collectionId,
-//     $new_collection_id: newCollectionId,
-//     $name: name,
-//   });
-// }
+export function updateCollection(collectionId, newCollectionId, name) {
+  return db_ops.update_collection_by_id.get({
+    $collection_id: collectionId,
+    $new_collection_id: newCollectionId,
+    $name: name,
+  });
+}
 
 export function validateSongData(song) {
   var errors = [];
@@ -236,13 +236,14 @@ export default {
   hasArtist,
   hasSong,
   addCollection,
+  updateCollection,
   addArtist,
   addSong,
   updateArtist,
   updateSong,
   deleteArtistById,
+  validateSongData,
   deleteSongById,
   validateCollectionOrArtistName,
-  
   generateCollectionId
 };
