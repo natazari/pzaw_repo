@@ -18,7 +18,7 @@
         <% collection.artists.forEach(function(artist){ %>
         <li>
           <%- include("forms/edit_artist.ejs", {artist, collection}) %>
-          <form class="collection-action" action="/collections/delete/<%= collection.id %>" method="POST">
+          <form action="/artists/delete/<%= artist.id %>" method="POST">
             <button>Usuń</button>
           </form>
         </li>

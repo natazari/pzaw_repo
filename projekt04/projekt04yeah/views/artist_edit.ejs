@@ -18,9 +18,8 @@
       <ul id="songs">
         <% artist.songs.forEach(function(song){ %>
         <li>
-          <% artist.songs.forEach(function(song){ %>
-          <form class="artist-action" action="/collections/artists/songs/delete/<%= song.id %>" method="POST">
-            <button>Usuń</button>
+          <%- include("forms/edit_song.ejs", { song, artist }) %>
+          <form action="/collections/artists/songs/delete/<%= artist.id %>/<%= song.id %>" method="POST"><button>Usuń</button>
           </form>
         </li>
         <% }) %>

@@ -181,7 +181,6 @@ app.post("/collections/edit/:collection_id", (req, res) => {
         collection_name
       );
       if (collection != null) {
-        // category id may have changed due to name change
         res.redirect("/collections/" + collection.id);
         res.write("Unexpected error while updating collection :[[");
         res.sendStatus(500);
@@ -214,6 +213,57 @@ app.get("/collections/artists/edit/:artist_id", (req, res) => {
 app.post("/collections/artists/edit/:artist_id", (req, res) => {
   const artist_id = req.params.artist_id;
 
+  if (!collections.hasArtist(artist_id)) {
+    return res.sendStatus(404);
+  }
+
+  // const song = {
+  //   id: song_id,
+  //   song_name: req.body.song_name,
+  //   album: req.body.album,
+  // };
+
+  // const errors = collections.validateSongData(song);
+
+  // if (errors.length === 0) {
+  //   collections.updateSong(song);
+  //   return res.redirect(`/artists/${artist_id}`);
+  // }
+  const artist_name = req.body.name;
+
+  const errors = collections.validateCollectionOrArtistName(artist_name);
+
+  if (errors.length === 0) {
+    collections.updateArtist({
+      id: artist_id,
+      artist_name,
+    });
+       return res.redirect(`/artists/${artist_id}`);
+  }
+
+  const artist = collections.getArtist(artist_id);
+
+  res.status(400).render("artist", {
+    errors,
+    title: artist.artist_name,
+    artist,
+  });
+});
+
+app.get("/songs/edit/:song_id", (req, res) => {
+  const song = collections.getSong(req.params.song_id);
+    res.render("song_edit", {
+    title: "Edycja piosenki",
+    song,
+  });
+});
+
+
+
+app.post("/collections/artists/songs/edit/:artist_id/:song_id", (req, res) => {
+  const artist_id = req.params.artist_id;
+  const song_id = req.params.song_id;
+
   if (!collections.hasArtist(artist_id) || !collections.hasSong(song_id)) {
     return res.sendStatus(404);
   }
@@ -225,13 +275,12 @@ app.post("/collections/artists/edit/:artist_id", (req, res) => {
   };
 
   const errors = collections.validateSongData(song);
-
   if (errors.length === 0) {
     collections.updateSong(song);
     return res.redirect(`/artists/${artist_id}`);
   }
 
-  const artist = collections.getArtist(artist_id);
+   const artist = collections.getArtist(artist_id);
 
   res.status(400).render("artist", {
     errors,
@@ -239,7 +288,8 @@ app.post("/collections/artists/edit/:artist_id", (req, res) => {
     artist,
   });
 });
-app.post("/collections/artists/songs/delete/:song_id", (req, res) => {
+
+app.post("/collections/artists/songs/delete/:artist_id/:song_id", (req, res) => {
   const artist_id = req.params.artist_id;
   const song_id = req.params.song_id;
 
@@ -255,3 +305,4 @@ app.post("/collections/artists/songs/delete/:song_id", (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
+//wdym no changes 
