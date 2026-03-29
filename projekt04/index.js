@@ -1,16 +1,43 @@
 import express from "express";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
+
 import collections from "./models/collections.js";
+import settings from "./models/settings.js";
 import session from "./models/session.js";
 import auth from "./controllers/auth.js";
 
-const port = 8000;
+const port = process.env.PORT || 8000;
+const LAST_VIEWED_COOKIE = "__Host-fisz-last-viewed";
+const ONE_DAY = 24 * 60 * 60 * 1000;
+const ONE_MONTH = 30 * ONE_DAY;
+const SECRET = process.env.SECRET;
+
+if (SECRET == null) {
+  console.error(
+    "SECRET environment variable missing. Please create an env file or provide SECRET via environment variables.",
+  );
+  process.exit(1); 
+}
+
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
 app.use(morgan("dev"));
+app.use(cookieParser(SECRET));
+
+app.use(settings.settingsHandler);
+app.use(session.sessionHandler);
+
+const settingsRouter = express.Router();
+settingsRouter.use("/toggle-theme", settings.themeToggle);
+settingsRouter.use("/accept-cookies", settings.acceptCookies);
+settingsRouter.use("/decline-cookies", settings.declineCookies);
+settingsRouter.use("/manage-cookies", settings.manageCookies);
+app.use("/settings", settingsRouter);
+
 
 const authRouter = express.Router();
 authRouter.get("/signup", auth.signup_get);
@@ -19,6 +46,23 @@ authRouter.get("/login", auth.login_get);
 authRouter.post("/login", auth.login_post);
 authRouter.get("/logout", auth.logout);
 app.use("/auth", authRouter);
+
+
+app.get("/", (req, res) => {
+  var last_viewed_collections = null;
+  if (res.locals.app.cookie_consent && req.signedCookies[LAST_VIEWED_COOKIE]) {
+    let last_viewed = req.signedCookies[LAST_VIEWED_COOKIE] || [];
+    last_viewed_collections = last_viewed
+      .map((x) => parseInt(x, 10))
+      .filter((x) => !isNaN(x))
+      .map((id) => flashcards.getCollectionSummary(id));
+  }
+  res.render("collections", {
+    title: "Kolekcje",
+    collections: collections.getCollectionSummaries(),
+    last_viewed_collections,
+  });
+});
 
 app.get("/collections", (req, res) => {
   res.render("collections", {
@@ -36,6 +80,22 @@ app.get("/collections/new_collection", (req, res) => {
 app.get("/collections/:collection_id", (req, res) => {
   const collection = collections.getCollection(req.params.collection_id);
   if (collection != null) {
+    if (res.locals.app.cookie_consent) {
+      let last_viewed_dirty = req.signedCookies[LAST_VIEWED_COOKIE] || [];
+      let last_viewed = [
+        collection.collection_id,
+        ...last_viewed_dirty
+          .map((x) => parseInt(x, 10))
+          .filter((x) => !isNaN(x) && x !== collection.collection_id)
+          .slice(0, 2),
+      ];
+      res.cookie(LAST_VIEWED_COOKIE, last_viewed, {
+        httpOnly: true,
+        secure: true,
+        maxAge: ONE_MONTH,
+        signed: true,
+      });
+    }
     res.render("collection", {
       title: collection.name,
       collection,

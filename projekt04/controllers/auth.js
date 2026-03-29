@@ -1,5 +1,5 @@
 import { createSession, deleteSession } from "./../models/session.js";
-import { createUser, validatePassword } from "./../models/user.js";
+import { createUser, validatePassword } from "./../models/user.js"; 
 
 export function signup_get(req, res) {
   let form = {
