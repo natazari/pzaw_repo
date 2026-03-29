@@ -1,6 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import collections from "./models/collections.js";
+import session from "./models/session.js";
+import auth from "./controllers/auth.js";
 
 const port = 8000;
 
@@ -8,8 +10,15 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
-
 app.use(morgan("dev"));
+
+const authRouter = express.Router();
+authRouter.get("/signup", auth.signup_get);
+authRouter.post("/signup", auth.signup_post);
+authRouter.get("/login", auth.login_get);
+authRouter.post("/login", auth.login_post);
+authRouter.get("/logout", auth.logout);
+app.use("/auth", authRouter);
 
 app.get("/collections", (req, res) => {
   res.render("collections", {
@@ -217,18 +226,6 @@ app.post("/collections/artists/edit/:artist_id", (req, res) => {
     return res.sendStatus(404);
   }
 
-  // const song = {
-  //   id: song_id,
-  //   song_name: req.body.song_name,
-  //   album: req.body.album,
-  // };
-
-  // const errors = collections.validateSongData(song);
-
-  // if (errors.length === 0) {
-  //   collections.updateSong(song);
-  //   return res.redirect(`/artists/${artist_id}`);
-  // }
   const artist_name = req.body.name;
 
   const errors = collections.validateCollectionOrArtistName(artist_name);
@@ -305,4 +302,3 @@ app.post("/collections/artists/songs/delete/:artist_id/:song_id", (req, res) => 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
-//wdym no changes 
