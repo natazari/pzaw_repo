@@ -1,5 +1,8 @@
 <%- include("head.partial.ejs") %>
 <main>
+  <nav>
+    <a href="/collections/">Powrót</a>
+  </nav>
   <h1><%= title %></h1>
   <a href="/collections/artists/edit/<%= artist.id %>" class="action-link">Edytuj artystę</a>
   <% if (artist.songs && artist.songs.length > 0) { %>

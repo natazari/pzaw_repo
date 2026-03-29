@@ -1,7 +1,7 @@
 <%- include("head.partial.ejs") %>
 <main>
   <nav>
-    <a href="/collections">Powrót do listy kolekcji</a>
+  <a href="/collections/<%= collection.id %>">Powrót do kolekcji <%= collection.name %></a>
   </nav>
   <h1><%= title %></h1>
   <div>
@@ -28,7 +28,7 @@
       <p>W tej kolekcji nie ma żadnych artystów. Dodaj nowe poniżej.</p>
     <% } %>
   </div>
-  <a href="/collections/<%= collection.id %>">Powrót</a>
+
 </main>
 
 <%- include("foot.partial.ejs") %>

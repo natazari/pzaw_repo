@@ -34,6 +34,7 @@ button{
     color: white;
     border-radius: 10%;
     border: dashed rgb(0, 0, 0) 5px;
+    margin:5px;
  
 }
 button:hover{
@@ -60,3 +61,4 @@ a{
 li{
     font-style: italic;
 }
+

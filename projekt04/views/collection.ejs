@@ -1,5 +1,8 @@
 <%- include("head.partial.ejs") %>
 <main>
+  <nav>
+  <a href="/collections/">Powrót do reszty kolekcji</a>
+  </nav>
   <h1><%= title %></h1>
   <a href="/collections/edit/<%= collection.id %>" class="action-link">Edytuj kolekcję</a>
   <% if (collection.artists && collection.artists.length > 0) { %>
