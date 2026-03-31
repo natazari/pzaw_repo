@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -7,11 +8,10 @@ import settings from "./models/settings.js";
 import session from "./models/session.js";
 import auth from "./controllers/auth.js";
 
+
 const port = process.env.PORT || 8000;
-const LAST_VIEWED_COOKIE = "__Host-fisz-last-viewed";
-const ONE_DAY = 24 * 60 * 60 * 1000;
-const ONE_MONTH = 30 * ONE_DAY;
 const SECRET = process.env.SECRET;
+
 
 if (SECRET == null) {
   console.error(
@@ -31,13 +31,12 @@ app.use(cookieParser(SECRET));
 app.use(settings.settingsHandler);
 app.use(session.sessionHandler);
 
-const settingsRouter = express.Router();
-settingsRouter.use("/toggle-theme", settings.themeToggle);
-settingsRouter.use("/accept-cookies", settings.acceptCookies);
-settingsRouter.use("/decline-cookies", settings.declineCookies);
-settingsRouter.use("/manage-cookies", settings.manageCookies);
-app.use("/settings", settingsRouter);
-
+function requireAuth(req, res, next) {
+  if (!res.locals.user) {
+    return res.redirect("/auth/login");
+  }
+  next();
+}
 
 const authRouter = express.Router();
 authRouter.get("/signup", auth.signup_get);
@@ -49,25 +48,18 @@ app.use("/auth", authRouter);
 
 
 app.get("/", (req, res) => {
-  var last_viewed_collections = null;
-  if (res.locals.app.cookie_consent && req.signedCookies[LAST_VIEWED_COOKIE]) {
-    let last_viewed = req.signedCookies[LAST_VIEWED_COOKIE] || [];
-    last_viewed_collections = last_viewed
-      .map((x) => parseInt(x, 10))
-      .filter((x) => !isNaN(x))
-      .map((id) => flashcards.getCollectionSummary(id));
-  }
+
   res.render("collections", {
     title: "Kolekcje",
-    collections: collections.getCollectionSummaries(),
-    last_viewed_collections,
+    collections: collections.getCollectionSummaries(res.locals.user?.id)
+    
   });
 });
 
 app.get("/collections", (req, res) => {
   res.render("collections", {
     title: "Kolekcje!!!",
-    collections: collections.getCollectionSummaries(),
+    collections: collections.getCollectionSummaries(res.locals.user?.id)
   });
 });
 
@@ -80,22 +72,7 @@ app.get("/collections/new_collection", (req, res) => {
 app.get("/collections/:collection_id", (req, res) => {
   const collection = collections.getCollection(req.params.collection_id);
   if (collection != null) {
-    if (res.locals.app.cookie_consent) {
-      let last_viewed_dirty = req.signedCookies[LAST_VIEWED_COOKIE] || [];
-      let last_viewed = [
-        collection.collection_id,
-        ...last_viewed_dirty
-          .map((x) => parseInt(x, 10))
-          .filter((x) => !isNaN(x) && x !== collection.collection_id)
-          .slice(0, 2),
-      ];
-      res.cookie(LAST_VIEWED_COOKIE, last_viewed, {
-        httpOnly: true,
-        secure: true,
-        maxAge: ONE_MONTH,
-        signed: true,
-      });
-    }
+    
     res.render("collection", {
       title: collection.name,
       collection,
@@ -120,7 +97,7 @@ app.get("/artists/:artist_id", (req, res)=>{
 });
 
 
-app.post("/collections/new_collection", (req, res) => {
+app.post("/collections/new_collection", requireAuth, (req, res) => {
   const collection_name = req.body.name;
   var collection_id = null;
   var errors = collections.validateCollectionOrArtistName(collection_name);
@@ -132,7 +109,7 @@ app.post("/collections/new_collection", (req, res) => {
   }
 
   if (errors.length == 0) {
-    collections.addCollection(collection_id, collection_name);
+    collections.addCollection(collection_id, collection_name, res.locals.user);
     res.redirect(`/collections/${collection_id}`);
   } else {
     res.status(400);
@@ -154,7 +131,7 @@ app.get("/collections/:collection_id/artists/new", (req, res) => {
 
 app.post("/artists/delete/:artist_id", (req, res) => {
   collections.deleteArtistById(req.params.artist_id);
-  res.redirect("back");
+  res.redirect("/collections/");
 });
 
 app.post("/collections/:collection_id/artists", (req, res) => {
@@ -215,21 +192,23 @@ app.post("/artists/:artist_id/add_song", (req, res) => {
 
 app.get("/collections/edit/:collection_id", (req, res) => {
   const collection_id = req.params.collection_id;
-  const errors = [];
-  var collection = collections.getCollection(collection_id);
-  if (collection != null) {
-    res.render("collection_edit", {
-      errors,
-      title: "Edycja kolekcji",
-      collection,
-    });
-  } else {
-    res.sendStatus(404);
-  }
+ if (!collections.canEdit(collection_id, res.locals.user)) {
+  return res.redirect("/collections/" + collection_id);
+}
+  const collection = collections.getCollection(collection_id);
+  if (!collection) return res.sendStatus(404);
+  res.render("collection_edit", {
+    errors: [],
+    title: "Edycja kolekcji",
+    collection,
+  });
 });
 
 app.post("/collections/edit/:collection_id", (req, res) => {
   const collection_id = req.params.collection_id;
+  if (!collections.canEdit(collection_id, res.locals.user)) {
+    return res.sendStatus(403);
+  }
   if (collections.hasCollection(collection_id)) {
     const collection_name = req.body.name;
     var new_collection_id = null;
@@ -249,11 +228,11 @@ app.post("/collections/edit/:collection_id", (req, res) => {
         new_collection_id,
         collection_name
       );
-      if (collection != null) {
-        res.redirect("/collections/" + collection.id);
-        res.write("Unexpected error while updating collection :[[");
-        res.sendStatus(500);
-      }
+    if (collection != null) {
+      return res.redirect("/collections/" + collection.id);
+      } else {
+      res.status(500).send("Unexpected error while updating collection");
+}
     } else {
       const collection = collections.getCollection(collection_id);
       res.render("collection_edit", {
@@ -268,10 +247,12 @@ app.post("/collections/edit/:collection_id", (req, res) => {
 });
 
 app.get("/collections/artists/edit/:artist_id", (req, res) => {
-  const artist = collections.getArtist(req.params.artist_id);
-
-  if (!artist) return res.sendStatus(404);
-
+  const artist_id = req.params.artist_id;
+const artistId = req.params.artist_id;
+if (!collections.canEditArtist(artistId, res.locals.user)) {
+  return res.redirect("/collections");
+}
+  const artist = collections.getArtist(artist_id);
   res.render("artist_edit", {
     title: "Edycja artysty",
     artist,
@@ -281,23 +262,22 @@ app.get("/collections/artists/edit/:artist_id", (req, res) => {
 
 app.post("/collections/artists/edit/:artist_id", (req, res) => {
   const artist_id = req.params.artist_id;
-
+const artistId = req.params.artist_id;
+if (!collections.canEditArtist(artistId, res.locals.user)) {
+  return res.redirect("/collections");
+}
   if (!collections.hasArtist(artist_id)) {
     return res.sendStatus(404);
   }
-
   const artist_name = req.body.name;
-
   const errors = collections.validateCollectionOrArtistName(artist_name);
-
   if (errors.length === 0) {
     collections.updateArtist({
       id: artist_id,
       artist_name,
     });
-       return res.redirect(`/artists/${artist_id}`);
+    return res.redirect(`/artists/${artist_id}`);
   }
-
   const artist = collections.getArtist(artist_id);
 
   res.status(400).render("artist", {

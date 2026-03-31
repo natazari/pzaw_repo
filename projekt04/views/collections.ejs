@@ -1,16 +1,8 @@
-<main><%- include("head.partial.ejs") %>
-
+<%- include("head.partial.ejs") %>
 
   <h1><%= title %></h1>
-  <% if (last_viewed_collections?.length > 0) { %>
-  <h2>Ostatnio przeglądane</h2>
-  <ul id="recently_viewed">
-    <% last_viewed_collections.forEach(function(collection){ %>
-    <li><a href="/view/<%= collection.id %>"><%= collection.name %></a></li>
-    <% }) %>
-  </ul>
   <h2>Wszystkie</h2>
-  <% } /* (last_viewed_collections.length > 0) */ %>
+  
   <ul id="collections">
     <% collections.forEach(function(collection){ %>
     <li><a href="/collections/<%= collection.id %>"><%= collection.name %></a></li>

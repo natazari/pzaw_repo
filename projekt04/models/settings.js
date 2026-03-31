@@ -2,22 +2,10 @@
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const ONE_MONTH = 30 * ONE_DAY;
-const THEME_COOKIE = "__Host-fisz-theme";
-const CONSENT_COOKIE = "__Host-fisz-consent";
+const THEME_COOKIE = "__Host-cols-theme";
+const CONSENT_COOKIE = "__Host-cols-consent";
 const CONSENT_PARAMS = { maxAge: ONE_MONTH, secure: true, httpOnly: true };
 
-export function themeToggle(req, res) {
-  var theme = req.cookies[THEME_COOKIE];
-  if (theme === "dark") {
-    theme = "light";
-  } else {
-    theme = "dark";
-  }
-  res.cookie(THEME_COOKIE, theme, { maxAge: ONE_MONTH, secure: true });
-
-  var next = req.query.next || "/";
-  res.redirect(next);
-}
 
 export function acceptCookies(req, res) {
   res.cookie(CONSENT_COOKIE, true, CONSENT_PARAMS);
@@ -62,7 +50,7 @@ function settingsHandler(req, res, next) {
 }
 
 export default {
-  themeToggle,
+
   acceptCookies,
   declineCookies,
   manageCookies,

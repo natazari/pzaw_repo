@@ -18,9 +18,10 @@ const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS fc_users (
+  CREATE TABLE IF NOT EXISTS cl_users (
     id              INTEGER PRIMARY KEY,
     username        TEXT UNIQUE,
+    is_admin INTEGER DEFAULT 0,
     passhash        TEXT,
     created_at      INTEGER
   ) STRICT;
@@ -28,17 +29,20 @@ db.exec(`
 
 const db_ops = {
   create_user: db.prepare(
-    "INSERT INTO fc_users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING id;",
+    "INSERT INTO cl_users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING id;",
   ),
   get_user: db.prepare(
-    "SELECT id, username, created_at FROM fc_users WHERE id = ?;",
+    "SELECT id, username, created_at FROM cl_users WHERE id = ?;",
   ),
   find_by_username: db.prepare(
-    "SELECT id, username, created_at FROM fc_users WHERE username = ?;",
+    "SELECT id, username, created_at FROM cl_users WHERE username = ?;",
   ),
   get_auth_data: db.prepare(
-    "SELECT id, passhash FROM fc_users WHERE username = ?;",
+    "SELECT id, passhash FROM cl_users WHERE username = ?;",
   ),
+  set_admin: db.prepare(
+  "UPDATE cl_users SET is_admin = 1 WHERE id = ?;"
+)
 };
 
 export async function createUser(username, password) {
@@ -55,10 +59,8 @@ export async function createUser(username, password) {
 
 export async function validatePassword(username, password) {
   let auth_data = db_ops.get_auth_data.get(username);
-  if (auth_data != null) {
-    if (await argon2.verify(auth_data.passhash, password, HASH_PARAMS)) {
-      return auth_data.id;
-    }
+   if (auth_data && await argon2.verify(auth_data.passhash, password, HASH_PARAMS)) {
+    return auth_data.id;
   }
   return null;
 }
@@ -66,9 +68,13 @@ export async function validatePassword(username, password) {
 export function getUser(user_id) {
   return db_ops.get_user.get(user_id);
 }
+export function makeAdmin(id) {
+  return db_ops.set_admin.run(id);
+}
 
 export default {
   createUser,
   validatePassword,
   getUser,
+  makeAdmin
 };

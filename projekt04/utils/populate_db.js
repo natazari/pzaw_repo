@@ -1,5 +1,7 @@
+import "dotenv/config";
+import user from "../models/user.js";
 import collections from "../models/collections.js";
-
+import "dotenv/config";
 const collections_list = {
   "Metal": {
     artists: [
@@ -44,30 +46,18 @@ const collections_list = {
 };
 
 console.log("Populating db...");
-
-// Object.entries(collections_list).forEach(([id, data]) => {
-//   let collection = collections.addCollection(id, data.artist);
-//   console.log("Created collection:", collection);
-
-//   let artist = collections.addArtist(collection.id, {
-//     artist_name: data.artist,
-//   });
-//   console.log("Created artist:", artist);
-
-//   for (let song of data.songs) {
-//     let s = collections.addSong(artist.id, song);
-//     console.log("Created song:", s);
-//   }
-// });
+let admin = await user.createUser("admin", "changeme");
+user.makeAdmin(admin.id);
+let student = await user.createUser("student", "changeme");
 
 Object.entries(collections_list).forEach(([id, data]) => {
-  let collection = collections.addCollection(id, id);
+  let collection = collections.addCollection(id, id, student);
   console.log("Created collection:", collection);
 
   for (let artistData of data.artists) {
-    let artist = collections.addArtist(collection.id, {
-      artist_name: artistData.artist,
-    });
+   let artist = collections.addArtist(id, {
+  artist_name: artistData.artist,
+});
     console.log("Created artist:", artist);
 
     for (let song of artistData.songs) {
@@ -76,3 +66,4 @@ Object.entries(collections_list).forEach(([id, data]) => {
     }
   }
 });
+
