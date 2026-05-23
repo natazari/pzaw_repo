@@ -2,7 +2,8 @@ Kolekcje muzyczne
 Ta strona służy do organizacji swoich kolekcji muzycznych, ale roznież przeglądania kolekcji stworzonych przez innych użytkowników. 
 
 --Konfiguracja:
-git clone https://github.com/natazari/pzaw_repo.git 
+git clone https://github.com/natazari/pzaw_repo.git
+cd projekt04 
 npm install
 npm run generate_env
 npm run populate_db
