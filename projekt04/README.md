@@ -19,7 +19,7 @@ login: student  hasło: changeme
 
 | CZYNNOŚĆ                                  | KTO JEST UPOWAŻNIONY                                        |
 | -------------                             | -------------                                               |
-| Przeglądanie kolekcji                     | Wszyscy                                                     |
+| Przeglądanie kolekcji                     | Wszyscy |
 | Tworzenie, edytowanie, usuwanie  kolekcji | Zalogowani użytkownicy                                      |
 | Dodawanie, edytowanie, usuwanie artystów  | Zalogowani użytkownicy, którzy są autorami kolekcji, admin  |
 | Dodawanie, edytowanie, usuwanie piosenek  | Zalogowani użytkownicy, którzy są autorami kolekcji, admin  |
