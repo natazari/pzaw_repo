@@ -1,5 +1,6 @@
 Kolekcje muzyczne
 Ta strona służy do organizacji swoich kolekcji muzycznych, ale roznież przeglądania kolekcji stworzonych przez innych użytkowników. 
+Przeglądanie kolekcji jest dozwolone bez zalogowania. Aby dodawać, edytować i usuwać własne kolekcje trzeba się zalogować lub zarejestrować.
 
 --Konfiguracja:
 git clone https://github.com/natazari/pzaw_repo.git
