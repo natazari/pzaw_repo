@@ -31,9 +31,9 @@ const db_ops = {
   create_user: db.prepare(
     "INSERT INTO cl_users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING id;",
   ),
-  get_user: db.prepare(
-    "SELECT id, username, created_at FROM cl_users WHERE id = ?;",
-  ),
+get_user: db.prepare(
+  "SELECT id, username, is_admin, created_at FROM cl_users WHERE id = ?;"
+),
   find_by_username: db.prepare(
     "SELECT id, username, created_at FROM cl_users WHERE username = ?;",
   ),

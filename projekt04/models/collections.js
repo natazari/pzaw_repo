@@ -65,9 +65,9 @@ const db_ops = {
   insert_song: db.prepare(
     "INSERT INTO cl_songs (artist_id, song_name, album) VALUES ($artist_id, $song_name, $album);"
   ),
-  get_song_by_id: db.prepare(
-    "SELECT id, song_name, album FROM cl_songs WHERE id = $id;"
-  ),
+ get_song_by_id: db.prepare(
+  "SELECT id, artist_id, song_name, album FROM cl_songs WHERE id = $id;"
+),
   get_songs_by_artist: db.prepare(
     "SELECT id, song_name, album FROM cl_songs WHERE artist_id = $artist_id;"
   ),
@@ -77,9 +77,21 @@ const db_ops = {
   delete_song: db.prepare(
     "DELETE FROM cl_songs WHERE id = $id;"
   ),
+  get_collection_by_pk: db.prepare(
+  "SELECT collection_id, id, name, author_id FROM cl_collections WHERE collection_id = $pk;"
+)
 };
+// Show all collections publicly, but you could filter by user_id here if needed
 export function getCollectionSummaries() {
   return db.prepare("SELECT id, name, author_id FROM cl_collections").all();
+}
+
+export function canEditArtist(artistId, user) {
+  const artist = db_ops.get_artist_by_id.get({ $id: artistId });
+  if (!artist) return false;
+  const collection = db_ops.get_collection_by_pk.get({ $pk: artist.collection_id });
+  if (!collection) return false;
+  return user != null && (collection.author_id === user.id || user.is_admin);
 }
 
 export function getCollection(id) {
@@ -135,15 +147,15 @@ export function addArtist(collectionId, artist) {
   });
   return artists[artists.length - 1];
 }
-export function canEditArtist(artistId, user) {
-  const artist = db_ops.get_artist_by_id.get({ $id: artistId });
-  if (!artist) return false;
+// export function canEditArtist(artistId, user) {
+//   const artist = db_ops.get_artist_by_id.get({ $id: artistId });
+//   if (!artist) return false;
 
-  const collection = getCollection(artist.collection_id);
-  if (!collection) return false;
+//   const collection = getCollection(artist.collection_id);
+//   if (!collection) return false;
 
-  return user != null && (collection.author_id === user.id || user.is_admin);
-}
+//   return user != null && (collection.author_id === user.id || user.is_admin);
+// }
 export function getArtist(id) {
   const artist = db_ops.get_artist_by_id.get({ $id: id });
   if (!artist) return null;
