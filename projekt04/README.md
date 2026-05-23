@@ -3,9 +3,13 @@ Ta strona służy do organizacji swoich kolekcji muzycznych, ale roznież przegl
 
 --Konfiguracja:
 git clone https://github.com/natazari/pzaw_repo.git
+
 cd projekt04 
+
 npm install
+
 npm run generate_env
+
 npm run populate_db
 
 http://localhost:8000
