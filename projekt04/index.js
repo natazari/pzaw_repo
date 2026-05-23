@@ -197,6 +197,7 @@ app.get("/collections/:collection_id", (req, res) => {
     res.render("collection", {
       title: collection.name,
       collection,
+      user: res.locals.user,
     });
   } else {
     res.sendStatus(404);
@@ -205,6 +206,9 @@ app.get("/collections/:collection_id", (req, res) => {
 
 app.get("/collections/:collection_id/artists/new", requireAuth, (req, res) => {
   const collection_id = req.params.collection_id;
+  if (!collections.canEdit(collection_id, res.locals.user)) {
+    return res.sendStatus(403);
+  }
   res.render("artist_new", {
     title: "Nowy artysta",
     collection_id
@@ -236,6 +240,9 @@ app.post("/collections/new_collection", requireAuth, (req, res) => {
 
 app.post("/collections/:collection_id/artists", requireAuth, (req, res) => {
   const collection_id = req.params.collection_id;
+  if (!collections.canEdit(collection_id, res.locals.user)) {
+    return res.sendStatus(403);
+  }
   const artist_name = req.body.artist_name;
   var errors = collections.validateCollectionOrArtistName(artist_name);
   if (errors.length == 0) {

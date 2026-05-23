@@ -1,19 +1,31 @@
+Kolekcje muzyczne
+Ta strona służy do organizacji swoich kolekcji muzycznych, ale roznież przeglądania kolekcji stworzonych przez innych użytkowników. 
+
+--Konfiguracja:
+git clone https://github.com/natazari/pzaw_repo.git 
+npm install
+npm run generate_env
+npm run populate_db
+
+http://localhost:8000
 
 
---konfiguracja-- 
--sklonuj repozytorium https://github.com/natazari/pzaw_repo.git na swój komputer - git clone https://github.com/natazari/pzaw_repo.git 
+Konta automatycznie tworzone:
+login: admin    hasło: changeme
+login: student  hasło: changeme
 
--poprzez terminal wejdź w folder projekt04 - cd projekt04 
+--Upoważnienia:
 
--jeli nie masz zainstalowanych to w terminalu: npm install morgan, npm install argon2, (jesli sa problemy to rozniez npm audit fix), npm install  cookie parser, npm install dotenv
+    CZYNNOŚĆ                                |   KTO JEST UPOWAŻNIONY
+                        
+Przeglądanie kolekcji                       |   Wszyscy
 
--stwórz .env: chmod a+x utils/generate_env.sh, utils/generate_env.sh > .env
+Tworzenie, edytowanie, usuwanie  kolekcji   |   Zalogowani użytkownicy
 
--dodaj dane do tablicy - node utils/populate_db.js 
+Dodawanie, edytowanie, usuwanie artystów    |  Zalogowani użytkownicy, którzy są autorami kolekcji, admin
 
--uruchom serwer - node index.js albo node --watch --env-file .env ./index.js 
+Dodawanie, edytowanie, usuwanie piosenek    |   Zalogowani użytkownicy, którzy są autorami kolekcji, admin
 
--otwórz stronę localhost w przeglądarce
 
-Wyświetlą się kolekcje muzyczne, po kliknięciu wyświetlą się artyści, którzy znajdują sie w kolekcji. Można edytować kolekcję, czyli nazwę kolekcji i artystów. Po kliknięciu w konkretnego artystę wyświetą się tytuły piosenek i ich albumy. Można edytować piosenki po kliknięciu w "edytuj artystę". Poniżej można wypełnić pola danymi i dodać nową piosenkę, dodana zostanie również do bazy danych, co oznacza, że po ponownym uruchomieniu serwera dodane piosenki nadal tam będą.
-Można się zarejestrować i zalogować na stronę, żeby kolekcje stworzone przez danego użytkownika nie byly edytowalne dla innnych
+
+

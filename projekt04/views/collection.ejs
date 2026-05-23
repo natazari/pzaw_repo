@@ -1,10 +1,10 @@
 <%- include("head.partial.ejs") %>
-
-  <!-- <nav>
-  <a href="/collections/">Powrót do reszty kolekcji</a>
-  </nav> -->
   <h1><%= title %></h1>
-  <a href="/collections/edit/<%= collection.id %>" class="action-link">Edytuj kolekcję</a>
+  <% if (user && (user.id === collection.author_id || user.is_admin)) { %>
+    <a href="/collections/edit/<%= collection.id %>" class="action-link">Edytuj kolekcję</a>
+  <% } else { %>
+    <a aria-disabled="true" style="pointer-events:none; opacity:0.5;" class="action-link">Edytuj kolekcję</a>
+  <% } %>
   <% if (collection.artists && collection.artists.length > 0) { %>
     <ul id="collections">
       <% collection.artists.forEach(function(artist){ %>
@@ -18,10 +18,16 @@
   <% } else { %>
     <p>W tej kolekcji nie ma jeszcze żadnych artystów. Dodaj kogoś poniżej.</p>
   <% } %>
-  <div>
-    <h3>Nowy artysta</h3>
-    <%- include("forms/new_artist.ejs", { collection_id: collection.id }) %>
-  </div>
+  <% if (user && (user.id === collection.author_id || user.is_admin)) { %>
+    <div>
+      <h3>Nowy artysta</h3>
+      <%- include("forms/new_artist.ejs", { collection_id: collection.id }) %>
+    </div>
+  <% } else { %>
+    <div>
+      <h3>Nowy artysta</h3>
+      <p style="opacity:0.5;">Tylko właściciel kolekcji może dodawać artystów.</p>
+    </div>
+  <% } %>
 </main>
-
 <%- include("foot.partial.ejs") %>
