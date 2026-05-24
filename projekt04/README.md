@@ -38,7 +38,7 @@ login: student  hasło: changeme
 
 ##Ścieżki
 
-## Autoryzacja — `/auth`
+## Autoryzacja`/auth`
 | Metoda | Ścieżka | Opis |
 |--------|---------|------|
 | GET | `/auth/signup` | Formularz rejestracji |
@@ -49,7 +49,7 @@ login: student  hasło: changeme
 
 ---
 
-## Kolekcje — `/collections`
+## Kolekcje `/collections`
 
 | Metoda | Ścieżka | Opis | Czy potrzebna autoyzacja |
 |--------|---------|------|------|
