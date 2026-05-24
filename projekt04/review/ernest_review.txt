@@ -1,0 +1,7 @@
+Uwagi:
+-w README.md, kroki konfiguracji nie biorą pod uwagę wejścia do folderu repo (cd pzaw_repo)
+-w README.md nie jest opisane jak uruchomić serwer, tylko jak go skonfigurować
+-README.md nie opisuje funkcjonalności strony
+-img1.png: można wpisać "puste" pola jako nazwa, są to znaki typu " " lub "​", takie pola uniemożliwiają klikanie na kolekcje, arystów itp.
+-ścieżki "/" i "/collections" są identyczne
+-przy wpisaniu do nazwy kolekcji samych nietypowych znaków, np. ≠²½←↓») id kolecki jest puste i nie można w nią wejść

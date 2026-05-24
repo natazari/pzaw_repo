@@ -1,0 +1,19 @@
+Stanisław Mruczkiewicz 
+23.05.2026 godzina 19.51
+REVIEW PROJEKTU
+
+* Zależność EJS jest przedawniona, w package.json jest wersja 3.1.10, a dostepna jest 5.0.2.
+
+README
+* Dodał bym troche więcej o funkcjach projektu lub np: o obsługiwanych ścieżkach. Oprócz tego wszystkie niezbędne informacje są z estetycznym wyglądem.
+
+WYGLĄD
+* Mam uwagę dotyczących wyglądu
+ - Baner na górze przechowuje 3 rzeczy, które nie są w ogóle oddzielone, przez co nie wygląda to estetycznie.
+* Na ogół spójnie kolorystycznie i ładne.
+
+FUNKCJONALNOSĆ
+- Brakuje zgody na zaakceptowanie COOKIES, oprócz tego strona działa bez zastrzeżeń
+
+POMYSŁ/KREATYWNOŚĆ
+- Ciekawy pomysł na stronę, jest strasznie dużo możliwości rozwoju z tego punktu, ja personalnie dodał bym polubienia/komentarze, a później nawet opcje publicznego profilu z własną kolekcją. Oczywiście to jest tylko sugestia, ale mimo to strona jest świetna.
