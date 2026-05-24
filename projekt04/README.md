@@ -5,6 +5,8 @@ Przeglądanie kolekcji jest dozwolone bez zalogowania. Aby dodawać, edytować i
 --Konfiguracja:
 git clone https://github.com/natazari/pzaw_repo.git
 
+cd pzaw_repo
+
 cd projekt04 
 
 npm install
@@ -12,6 +14,8 @@ npm install
 npm run generate_env
 
 npm run populate_db
+
+node index.js
 
 http://localhost:8000
 
@@ -29,4 +33,19 @@ login: student  hasło: changeme
 | Tworzenie, edytowanie, usuwanie  kolekcji | Zalogowani użytkownicy                                      |
 | Dodawanie, edytowanie, usuwanie artystów  | Zalogowani użytkownicy, którzy są autorami kolekcji, admin  |
 | Dodawanie, edytowanie, usuwanie piosenek  | Zalogowani użytkownicy, którzy są autorami kolekcji, admin  |
+
+
+
+--Ścieżki
+
+## Autoryzacja — `/auth`
+| Metoda | Ścieżka | Opis |
+|--------|---------|------|
+| GET | `/auth/signup` | Formularz rejestracji |
+| POST | `/auth/signup` | Obsługa rejestracji |
+| GET | `/auth/login` | Formularz logowania |
+| POST | `/auth/login` | Obsługa logowania |
+| GET | `/auth/logout` | Wylogowanie użytkownika |
+
+---
 
